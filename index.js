@@ -8,7 +8,7 @@ app.listen(80,()=>{
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-require("./v1/core")(app);
+require("./modules/core")(app);
 
 app.get("/",(req,res)=>{
   res.setHeader("Access-Control-Allow-Origin","*");

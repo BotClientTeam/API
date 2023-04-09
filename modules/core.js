@@ -15,14 +15,14 @@ module.exports = async(app)=>{
   });
 
   //ギルド一覧
-  app.get("/guilds",async(req,res)=>{
+  app.post("/guilds",async(req,res)=>{
     if(!req.body.token) return RestError.BadRequest(res,"Token is invalid")
 
     res.setHeader("Access-Control-Allow-Origin","*");
     res.json(    
       {
         "success": true,
-        "data": Rest.get(req.body.token,"/users/@me/guilds")
+        "data": await Rest.get(req.body.token,"/users/@me/guilds")
       }
     );
     res.end();
