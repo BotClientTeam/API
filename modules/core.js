@@ -28,7 +28,7 @@ module.exports = async(app)=>{
     res.end();
   });
 
-  //Error
+  //エラー処理
   app.use((req,res)=>{
     res.setHeader("Access-Control-Allow-Origin","*");
     RestError.NotFound(res);
