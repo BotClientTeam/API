@@ -2,13 +2,16 @@ const fetch = require("node-fetch");
 
 const token = "";
 
-fetch("http://localhost/guilds",{
+fetch("http://localhost/channels/",{
     "method": "POST",
     "headers": {
       "Content-type": "application/json"
     },
     "body": JSON.stringify({
-      "token": token
+      "token": token,
+      "message": {
+        "content": "テスト中"
+      }
     })
   })
   .then(res=>res.json())
