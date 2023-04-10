@@ -27,4 +27,17 @@ module.exports = async(app)=>{
     );
     res.end();
   });
+
+  app.post("/guild",async(req,res)=>{
+    if(!req.body.token||!req.body.guildId) return RestError.Request(res,400,"Token or GuildID is invalid")
+
+    res.setHeader("Access-Control-Allow-Origin","*");
+    res.json(    
+      {
+        "success": true,
+        "data": await Rest.get(req.body.token,`/guilds/${req.body.guildId}`)
+      }
+    );
+    res.end();
+  });
 }
