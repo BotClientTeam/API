@@ -3,7 +3,16 @@ module.exports = {
     res.status(code).json(
       {
         "success": false,
-        "error": message
+        "error": `RequestError: ${message}`
+      }
+    );
+    res.end();
+  },
+  "DiscordAPI": (res,message)=>{
+    res.status(400).json(
+      {
+        "success": false,
+        "error":  `DiscordAPIError: ${message}`
       }
     );
     res.end();
