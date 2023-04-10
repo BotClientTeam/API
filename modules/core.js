@@ -1,6 +1,6 @@
 module.exports = async(app)=>{
   const Rest = require("./lib/Rest");
-  const RestError = require("./lib/RestError")
+  const RestError = require("./lib/RestError");
 
   //ステータス
   app.get("/status",(req,res)=>{
@@ -16,7 +16,7 @@ module.exports = async(app)=>{
 
   //ギルド一覧
   app.post("/guilds",async(req,res)=>{
-    if(!req.body.token) return RestError.BadRequest(res,"Token is invalid")
+    if(!req.body.token) return RestError.Request(res,400,"Token is invalid")
 
     res.setHeader("Access-Control-Allow-Origin","*");
     res.json(    
@@ -26,16 +26,5 @@ module.exports = async(app)=>{
       }
     );
     res.end();
-  });
-
-  //エラー処理
-  app.use((req,res)=>{
-    res.setHeader("Access-Control-Allow-Origin","*");
-    RestError.NotFound(res);
-  });
-  
-  app.use((err,req,res)=>{
-    res.setHeader("Access-Control-Allow-Origin","*");
-    RestError.InternalServerError(res);
   });
 }
