@@ -106,7 +106,7 @@ module.exports = async(app)=>{
 
   //メッセージ取得
   app.post("/channels/:channelId/messages/:messageId",async(req,res)=>{
-    if(!req.body.token||!req.params.channelId||!req.body.messageId) return RestError.Request(res,400,"Token, ChannelID or MessageID is invalid");
+    if(!req.body.token||!req.params.channelId||!req.params.messageId) return RestError.Request(res,400,"Token, ChannelID or MessageID is invalid");
 
     const data = await Rest.get(req.body.token,`/channels/${req.params.channelId}/messages/${req.params.messageId}`);
 
