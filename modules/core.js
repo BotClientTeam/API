@@ -20,7 +20,7 @@ module.exports = async(app)=>{
   app.post("/check",async(req,res)=>{
     if(!req.body.token) return RestError.Request(res,400,"Token is invalid");
 
-    const res = await fetch("https://discord.com/api/v10/users/@me",{
+    const data = await fetch("https://discord.com/api/v10/users/@me",{
       "method": "GET",
       "headers": {
         "Content-type": "application/json",
@@ -31,7 +31,7 @@ module.exports = async(app)=>{
 
     res.setHeader("Access-Control-Allow-Origin","*");
 
-    if(res.status === 200){
+    if(data.status === 200){
       res.json(
         {
           "success": true,
