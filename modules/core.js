@@ -25,7 +25,7 @@ module.exports = async(app)=>{
       "headers": {
         "Content-type": "application/json",
         "user-agent": "DiscordBot (https://node.js.org, v10)",
-        "Authorization": `Bot ${token}`
+        "Authorization": `Bot ${req.body.token}`
       }
     }).catch(()=>{})
 
