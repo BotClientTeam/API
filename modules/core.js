@@ -1,4 +1,6 @@
 module.exports = async(app)=>{
+  const fetch = require("node-fetch");
+
   const Rest = require("./lib/Rest");
   const RestError = require("./lib/RestError");
 
@@ -11,6 +13,43 @@ module.exports = async(app)=>{
         "data": "API v1 is up and running"
       }
     );
+    res.end();
+  });
+
+  //ログインチェック
+  app.post("/check",async(req,res)=>{
+    if(!req.body.token) return RestError.Request(res,400,"Token is invalid");
+
+    const data = await fetch("https://discord.com/api/v10/users/@me",{
+      "method": "GET",
+      "headers": {
+        "Content-type": "application/json",
+        "user-agent": "DiscordBot (https://node.js.org, v10)",
+        "Authorization": `Bot ${req.body.token}`
+      }
+    }).catch(()=>{})
+
+    res.setHeader("Access-Control-Allow-Origin","*");
+
+    if(data.status === 200){
+      res.json(
+        {
+          "success": true,
+          "data": {
+            "login": true
+          }
+        }
+      );
+    }else{
+      res.json(
+        {
+          "success": true,
+          "data": {
+            "login": false
+          }
+        }
+      );
+    }
     res.end();
   });
 
