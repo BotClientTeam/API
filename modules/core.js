@@ -10,7 +10,7 @@ module.exports = async(app)=>{
     res.json(    
       {
         "success": true,
-        "data": "API v1 is up and running"
+        "data": "API is up and running"
       }
     );
     res.end();
