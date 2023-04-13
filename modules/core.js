@@ -53,6 +53,42 @@ module.exports = async(app)=>{
     res.end();
   });
 
+  //アカウント取得
+  app.post("/account",async(req,res)=>{
+    if(!req.body.token) return RestError.Request(res,400,"Token is invalid");
+
+    const data = await Rest.get(req.body.token,"/users/@me");
+
+    if(data.message) return RestError.DiscordAPI(res,data.message);
+
+    res.setHeader("Access-Control-Allow-Origin","*");
+    res.json(
+      {
+        "success": true,
+        "data": data
+      }
+    );
+    res.end();
+  });
+
+  //ユーザー取得
+  app.post("/users/:userId",async(req,res)=>{
+    if(!req.body.token||!req.params.userId) return RestError.Request(res,400,"Token or UserID is invalid");
+
+    const data = await Rest.get(req.body.token,`/users/${req.params.userId}`);
+
+    if(data.message) return RestError.DiscordAPI(res,data.message);
+
+    res.setHeader("Access-Control-Allow-Origin","*");
+    res.json(
+      {
+        "success": true,
+        "data": data
+      }
+    );
+    res.end();
+  });
+
   //ギルド一覧
   app.post("/guilds",async(req,res)=>{
     if(!req.body.token) return RestError.Request(res,400,"Token is invalid");
@@ -76,6 +112,42 @@ module.exports = async(app)=>{
     if(!req.body.token||!req.params.guildId) return RestError.Request(res,400,"Token or GuildID is invalid");
 
     const data = await Rest.get(req.body.token,`/guilds/${req.params.guildId}`);
+
+    if(data.message) return RestError.DiscordAPI(res,data.message);
+
+    res.setHeader("Access-Control-Allow-Origin","*");
+    res.json(
+      {
+        "success": true,
+        "data": data
+      }
+    );
+    res.end();
+  });
+
+  //ギルドメンバー一覧
+  app.post("/guilds/:guildId/members",async(req,res)=>{
+    if(!req.body.token||!req.params.guildId) return RestError.Request(res,400,"Token or GuildID is invalid");
+
+    const data = await Rest.get(req.body.token,`/guilds/${req.params.guildId}/members?limit=${req.body.limit||"1"}`);
+
+    if(data.message) return RestError.DiscordAPI(res,data.message);
+
+    res.setHeader("Access-Control-Allow-Origin","*");
+    res.json(
+      {
+        "success": true,
+        "data": data
+      }
+    );
+    res.end();
+  });
+
+  //ギルドメンバー取得
+  app.post("/guilds/:guildId/members/:userId",async(req,res)=>{
+    if(!req.body.token||!req.params.guildId||!req.params.userId) return RestError.Request(res,400,"Token, GuildID or UserID is invalid");
+
+    const data = await Rest.get(req.body.token,`/guilds/${req.params.guildId}/members/${req.params.userId}`);
 
     if(data.message) return RestError.DiscordAPI(res,data.message);
 
