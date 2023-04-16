@@ -129,7 +129,7 @@ module.exports = async(app)=>{
   app.post("/guilds/:guildId/members",async(req,res)=>{
     if(!req.body.token||!req.params.guildId) return RestError.Request(res,400,"Token or GuildID is invalid");
 
-    const data = await Rest.get(req.body.token,`/guilds/${req.params.guildId}/members?limit=${req.body.limit||"1"}`);
+    const data = await Rest.get(req.body.token,`/guilds/${req.params.guildId}/members?limit=${req.query.limit||"1"}`);
 
     if(data.message) return RestError.DiscordAPI(res,data.message);
 
