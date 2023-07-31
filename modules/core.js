@@ -1,3 +1,5 @@
+const cache = {};
+
 module.exports = async(app)=>{
   const fetch = require("node-fetch");
 
@@ -93,6 +95,18 @@ module.exports = async(app)=>{
   app.post("/guilds",async(req,res)=>{
     if(!req.body.token) return RestError.Request(res,400,"Token is invalid");
 
+    //キャッシュ済み
+    if(cache[req.body.token] && Date.now() - cache[req.body.token].time<req.query.cache){
+      res.setHeader("Access-Control-Allow-Origin","*");
+      res.json(
+        {
+          "success": true,
+          "data": cache[req.body.token].data
+        }
+      );
+      return res.end();
+    }
+
     let guilds = [];
     let guildSize;
     let after;
@@ -106,6 +120,11 @@ module.exports = async(app)=>{
 
       await new Promise(resolve=>setTimeout(resolve,50))
     }while(guildSize === 200)
+
+    cache[req.body.token] = {
+      data: guilds,
+      time: Date.now(),
+    };
 
     res.setHeader("Access-Control-Allow-Origin","*");
     res.json(
