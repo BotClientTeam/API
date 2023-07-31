@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 
 const token = "";
 
-fetch("http://localhost/guilds/949862128528027729/members?limit=10",{
+fetch("http://localhost:8000/guilds?all=hjgj",{
     "method": "POST",
     "headers": {
       "Content-type": "application/json"
