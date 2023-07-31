@@ -18,7 +18,7 @@ DiscordAPIの情報を取得するAPI
 - 指定したサーバーの情報を返します
 ### /guilds/{GuildID}/members [POST]
 - 指定したサーバーのメンバーを返します
-- Bodyに```{"limit":Number(1〜10000)}```を指定すると指定した人数の情報を返します(**デフォルト値は1**)
+- Bodyに```{"limit":Number(1〜10000)}```を指定すると指定した人数の情報を返します(**デフォルト値は50**)
 ### /guilds/{GuildID}/members/{UserID} [POST]
 - 指定したサーバーの指定したメンバーの情報を返します
 ### /guilds/{GuildID}/channels [POST]
