@@ -93,20 +93,26 @@ module.exports = async(app)=>{
   app.post("/guilds",async(req,res)=>{
     if(!req.body.token) return RestError.Request(res,400,"Token is invalid");
 
-    const data = await Rest.get(req.body.token,"/users/@me/guilds");
+    const guilds = [];
+    let after = null;
+    do{
+      const data = await Rest.get(req.body.token,`/users/@me/guilds?with_counts=true${after?`&after=${after}`:""}`);
+      if(data.message) return RestError.DiscordAPI(res,data.message);
 
-    if(data.message) return RestError.DiscordAPI(res,data.message);
+      guilds = guilds.concat(data);
+      after = guilds[guilds.length - 1].id;
+    }while(data.length === 200)
 
     res.setHeader("Access-Control-Allow-Origin","*");
     res.json(
       {
         "success": true,
-        "data": data
+        "data": guilds
       }
     );
     res.end();
   });
-
+  
   //ギルド取得
   app.post("/guilds/:guildId",async(req,res)=>{
     if(!req.body.token||!req.params.guildId) return RestError.Request(res,400,"Token or GuildID is invalid");
