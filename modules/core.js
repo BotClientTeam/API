@@ -93,7 +93,7 @@ module.exports = async(app)=>{
   app.post("/guilds",async(req,res)=>{
     if(!req.body.token) return RestError.Request(res,400,"Token is invalid");
 
-    const data = await Rest.get(req.body.token,"/users/@me/guilds");
+    const data = await Rest.get(req.body.token,"/users/@me/guilds?with_counts=true");
 
     if(data.message) return RestError.DiscordAPI(res,data.message);
 
