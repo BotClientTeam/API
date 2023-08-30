@@ -1,5 +1,3 @@
-const cache = {};
-
 module.exports = async(app)=>{
   const fetch = require("node-fetch");
 
@@ -95,42 +93,14 @@ module.exports = async(app)=>{
   app.post("/guilds",async(req,res)=>{
     if(!req.body.token) return RestError.Request(res,400,"Token is invalid");
 
-    //キャッシュ済み
-    if(cache[req.body.token] && Date.now() - cache[req.body.token].time<req.query.cache){
-      res.setHeader("Access-Control-Allow-Origin","*");
-      res.json(
-        {
-          "success": true,
-          "data": cache[req.body.token].data
-        }
-      );
-      return res.end();
-    }
-
-    let guilds = [];
-    let guildSize;
-    let after;
-    do{
-      const data = await Rest.get(req.body.token,`/users/@me/guilds?limit=200&with_counts=true${after?`&after=${after}`:""}`);
-      if(data.message) return RestError.DiscordAPI(res,data.message);
-
-      guilds = guilds.concat(data);
-      after = guilds[guilds.length - 1].id;
-      guildSize = data.length;
-
-      await new Promise(resolve=>setTimeout(resolve,50))
-    }while(guildSize === 200)
-
-    cache[req.body.token] = {
-      data: guilds,
-      time: Date.now(),
-    };
+    const data = await Rest.get(req.body.token,"/users/@me/guilds?limit=200&with_counts=true");
+    if(data.message) return RestError.DiscordAPI(res,data.message);
 
     res.setHeader("Access-Control-Allow-Origin","*");
     res.json(
       {
         "success": true,
-        "data": guilds
+        "data": data
       }
     );
     res.end();
